@@ -12,7 +12,6 @@ def gdrive_url(file_id):
 
 st.set_page_config(
     page_title="ResuMy",
-    page_icon="🔴",
     layout="wide",
     initial_sidebar_state="expanded",
 )
