@@ -145,7 +145,7 @@ def parse_skills(val):
 def load_data():
     import gdown, os
 
-    # ── Load JD ────────────────────────────────────────────────────────────────
+    # Load JD
     df_jd = pd.read_csv(gdrive_url(FILE_ID_JD))
     df_jd["require_skills"] = df_jd["require_skills"].apply(parse_skills)
     df_jd["skill_count"] = df_jd["require_skills"].apply(len)
@@ -362,10 +362,6 @@ with st.sidebar:
         <div style='font-size:1.1rem; font-weight:800; color:#E4002B;
                     letter-spacing:0.08em; text-transform:uppercase;'>
             CC26-PSU006
-        </div>
-        <div style='font-size:0.7rem; color:#555555; margin-top:4px;
-                    letter-spacing:0.06em; text-transform:uppercase;'>
-            DBS Coding Camp · Capstone
         </div>
     </div>
     <hr style='border-color:#2a2a2a; margin: 10px 0 16px 0;'>
