@@ -24,7 +24,7 @@ header[data-testid="stHeader"] {
     box-shadow: none !important;
 }
 header[data-testid="stHeader"]::before {
-    content: "💻 Analisis Tren Skill IT";
+    content: "Analisis Tren Skill IT";
     color: white !important;
     font-size: 1.5rem !important;
     font-family: sans-serif;
@@ -83,10 +83,10 @@ div[data-testid="stSidebar"] .stButton > button:focus {
 hr { border-color: #2a2a2a; }
 .stSelectbox label, .stNumberInput label { color: #CCCCCC !important; font-size: 0.82rem; }
 .section-title {
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: #E4002B;
-    letter-spacing: 0.06em;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #666666;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     margin-bottom: 6px;
 }
@@ -99,24 +99,27 @@ hr { border-color: #2a2a2a; }
 .page-subtitle {
     color: #888888;
     font-size: 0.88rem;
-    margin-top: 2px;
+    margin-top: 4px;
     margin-bottom: 20px;
+    max-width: 820px;
 }
 .gap-card {
-    background: linear-gradient(135deg, #1A0508 0%, #1A1A1A 100%);
-    border: 1px solid #3a1018;
-    border-top: 3px solid #E4002B;
-    border-radius: 10px;
+    background: #181818;
+    border: 1px solid #2a2a2a;
+    border-left: 3px solid #E4002B;
+    border-radius: 8px;
     padding: 20px 24px;
     margin-top: 8px;
 }
 .gap-card h4 {
-    color: #E4002B;
-    font-size: 0.8rem;
-    letter-spacing: 0.08em;
+    color: #BBBBBB;
+    font-size: 0.72rem;
+    letter-spacing: 0.10em;
     text-transform: uppercase;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
+    margin-top: 14px;
 }
+.gap-card h4:first-child { margin-top: 0; }
 .gap-card ul { color: #CCCCCC; font-size: 0.86rem; line-height: 1.7; padding-left: 18px; }
 .gap-card li { color: #CCCCCC; font-size: 0.86rem; line-height: 1.7; }
 .gap-card li strong { color: #FFFFFF; }
@@ -345,7 +348,7 @@ def make_gap_chart(gap_df, top_n, ascending=False):
         hovertemplate="<b>%{y}</b><br>Industry: %{x:.3f}%<extra></extra>",
     ))
     layout = {**PLOTLY_LAYOUT, "height": h, "bargap": 0.38,
-              "title": dict(text="<b>🏭 Industry Skill Demand</b>",
+              "title": dict(text="<b>Industry Skill Demand</b>",
                             font=dict(color="#FFFFFF", size=14), x=0)}
     fig.update_layout(**layout)
     return fig
@@ -376,9 +379,9 @@ with st.sidebar:
         st.session_state.page = "industri"
 
     pages = {
-        "industri": "📊  Tren Kebutuhan Industri",
-        "kandidat": "👤  Karakteristik Kandidat",
-        "gap":      "⚡  Analisis Gap Skill",
+        "industri": "Tren Kebutuhan Industri",
+        "kandidat": "Karakteristik Kandidat",
+        "gap":      "Analisis Gap Skill",
     }
     for key, label in pages.items():
         if st.button(label, key=f"nav_{key}", use_container_width=True):
@@ -390,7 +393,7 @@ with st.sidebar:
 try:
     D = load_data()
 except Exception as e:
-    st.error(f"❌ **Error saat memuat data:** {e}")
+    st.error(f"**Error saat memuat data:** {e}")
     st.stop()
 
 page = st.session_state.page
@@ -407,8 +410,8 @@ if page == "industri":
         }
         </style>
     """, unsafe_allow_html=True)
-    st.markdown('<div class="page-title">📊 Tren Kebutuhan Industri</div>', unsafe_allow_html=True)
-    st.markdown('<div class="page-subtitle" style="font-size:1.2rem;color:white;">Pertanyaan Bisnis 1: Bagaimana tren kebutuhan skill IT pada berbagai role industri, serta skill apa yang bersifat universal dan spesifik pada masing-masing role?</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-title">Tren Kebutuhan Industri</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-subtitle">Pertanyaan Bisnis 1: Bagaimana tren kebutuhan skill IT pada berbagai role industri, serta skill apa yang bersifat universal dan spesifik pada masing-masing role?</div>', unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns(3)
     col1.metric("Total Role Industri", D["df_jd"]["job_role"].nunique())
@@ -416,7 +419,7 @@ if page == "industri":
     col3.metric("Unique Skills",       D["df_jd_skills"]["skill"].nunique())
 
     st.markdown("<hr>", unsafe_allow_html=True)
-    st.markdown('<div class="section-title" style="text-align:center">🔥 Top Skill</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title" style="text-align:center">Top Skill</div>', unsafe_allow_html=True)
 
     ctrl1, ctrl2 = st.columns([3, 1])
     with ctrl1:
@@ -432,7 +435,7 @@ if page == "industri":
     st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("<hr>", unsafe_allow_html=True)
-    st.markdown('<div class="section-title" style="text-align:center">📋 Ringkasan Semua Role</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title" style="text-align:center">Ringkasan Semua Role</div>', unsafe_allow_html=True)
 
     col_left, col_right = st.columns(2)
     with col_left:
@@ -447,16 +450,16 @@ if page == "industri":
         st.plotly_chart(fig_sig, use_container_width=True)
 
     st.markdown("<hr>", unsafe_allow_html=True)
-    st.markdown('<div class="section-title" style="text-align:center">📝 Kesimpulan & Rekomendasi</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title" style="text-align:center">Kesimpulan & Rekomendasi</div>', unsafe_allow_html=True)
 
     col_a, col_b = st.columns(2)
     with col_a:
         st.markdown("""
         <div class="gap-card">
-            <h4>🔥 Skill yang Mendominasi Secara Keseluruhan</h4>
-            <li>Skill seperti Python, SQL, Analytics, Reporting, dan Excel muncul di banyak role sekaligus. Hal ini menandakan bahwa kemampuan analisis data, pelaporan, dan logika pemrograman telah menjadi fondasi penting yang universal di industri IT, tidak hanya terbatas pada kelompok profesi data.</li>
+            <h4>Skill yang Mendominasi Secara Keseluruhan</h4>
+            <li>Python, SQL, Analytics, Reporting, dan Excel ditemukan pada banyak role, menunjukkan bahwa skill tersebut dibutuhkan di berbagai bidang pekerjaan IT.</li>
             <br>
-            <h4>🧬 Skill Signature Role</h4>
+            <h4>Skill Signature Role</h4>
             <ul>
                 <li>Artificial Intelligence → AI Engineer</li>
                 <li>Machine Learning → Machine Learning Engineer</li>
@@ -464,15 +467,15 @@ if page == "industri":
                 <li>Javascript → Web Developer</li>
                 <li>Azure / AWS → Cloud Architect</li>
             </ul>
-            <h4>✨ Frekuensi Kemunculan vs Keunikan</h4>
-            <li>Skill umum seperti Python atau Excel memiliki frekuensi kemunculan yang tinggi di berbagai role namun tingkat keunikannya rendah. Sebaliknya, skill dengan spesifisitas tinggi (seperti Artificial Intelligence atau Machine Learning) menjadi pembeda kuat yang menentukan identitas utama dari role tersebut.</li>
+            <h4>Frekuensi Kemunculan vs Keunikan</h4>
+            <li>Python dan Excel banyak ditemukan di berbagai role. Sebaliknya, Artificial Intelligence dan Machine Learning lebih identik dengan role tertentu.</li>
         </div>
         """, unsafe_allow_html=True)
     with col_b:
         st.markdown("""
         <div class="gap-card">
-            <h4>🎯 Action Item</h4>
-            <li>Perusahaan sebaiknya memprioritaskan signature skill yang spesifik sebagai kriteria utama dalam job posting, sedangkan skill universal (seperti Excel atau Reporting) dapat diposisikan sebagai nilai tambah atau kriteria pendukung. Strategi ini akan membantu menarik kandidat yang tepat sasaran dan mengefisiensikan proses seleksi.</li>
+            <h4>Action Item</h4>
+            <li>Skill yang khas pada suatu role dapat menjadi fokus utama dalam job posting. Sementara itu, skill yang umum ditemukan di berbagai role dapat dijadikan persyaratan tambahan.</li>
         </div>
         """, unsafe_allow_html=True)
 
@@ -488,8 +491,8 @@ if page == "kandidat":
         }
         </style>
     """, unsafe_allow_html=True)
-    st.markdown('<div class="page-title">👤 Karakteristik Kandidat</div>', unsafe_allow_html=True)
-    st.markdown('<div class="page-subtitle" style="font-size:1.2rem;color:white;">Pertanyaan Bisnis 2: Bagaimana karakteristik kepemilikan skill kandidat pada berbagai role IT?</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-title">Karakteristik Kandidat</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-subtitle">Pertanyaan Bisnis 2: Bagaimana karakteristik kepemilikan skill kandidat pada berbagai role IT?</div>', unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns(3)
     col1.metric("Total Role Kandidat", D["df_cv"]["cv_role"].nunique())
@@ -497,7 +500,7 @@ if page == "kandidat":
     col3.metric("Unique Skills",       D["df_cv_skills"]["skill"].nunique())
 
     st.markdown("<hr>", unsafe_allow_html=True)
-    st.markdown('<div class="section-title" style="text-align:center">🔥 Top Skill Kandidat</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title" style="text-align:center">Top Skill Kandidat</div>', unsafe_allow_html=True)
 
     ctrl1, ctrl2 = st.columns([3, 1])
     with ctrl1:
@@ -513,7 +516,7 @@ if page == "kandidat":
     st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("<hr>", unsafe_allow_html=True)
-    st.markdown('<div class="section-title" style="text-align:center">📋 Ringkasan Semua Role Kandidat</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title" style="text-align:center">Ringkasan Semua Role Kandidat</div>', unsafe_allow_html=True)
 
     col_left, col_right = st.columns(2)
     with col_left:
@@ -528,28 +531,25 @@ if page == "kandidat":
         st.plotly_chart(fig_sig, use_container_width=True)
 
     st.markdown("<hr>", unsafe_allow_html=True)
-    st.markdown('<div class="section-title" style="text-align:center">📝 Kesimpulan & Rekomendasi</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title" style="text-align:center">Kesimpulan & Rekomendasi</div>', unsafe_allow_html=True)
 
     col_a, col_b = st.columns(2)
     with col_a:
         st.markdown("""
         <div class="gap-card">
-            <h4>🔥 Skill Terpopuler</h4>
-            <li>SQL dan Testing menjadi skill yang paling mendominasi di hampir seluruh CV kandidat (seperti pada role System Administrator, Network Engineer, Web Developer, hingga BI Analyst dengan persentase di atas 50%). Diikuti oleh kemampuan dasar web seperti HTML dan JavaScript, yang mencerminkan bahwa mayoritas kandidat IT saat ini memiliki fondasi kuat pada pengelolaan database dan pengembangan sistem.</li>
+            <h4>Skill Terpopuler</h4>
+            <li>SQL dan Testing merupakan skill yang paling sering muncul pada berbagai role kandidat. Selain itu, HTML dan JavaScript juga banyak ditemukan pada CV kandidat di beberapa role.</li>
             <br>
-            <h4>🔀 Variasi Jumlah Skill per Role</h4>
-            <ul>
-                <li>Kandidat pada role Business Analyst memiliki rata-rata skill tertinggi (32.6 skill), mencerminkan luasnya ekosistem dalam analisis bisnis</li>
-                <li>Kandidat pada role Cloud Engineer memiliki rata-rata skill terendah (8.1 skill), menunjukkan profil yang lebih terspesialisasi</li>
-            </ul>
-            <h4>🧬 Pola Signature Skill Kandidat</h4>
-            <li>Komunitas kandidat menunjukkan standar kompetensi yang sangat jelas pada beberapa role tertentu. Hal ini terlihat dari tingkat keunikan (signature skill) yang sangat tinggi, seperti kandidat Data Scientist yang 100% mencantumkan "A/B Testing" di CV mereka, serta kandidat Business Analyst dengan skill "Asp.Net" yang mencapai 77%.</li>
+            <h4>Variasi Jumlah Skill per Role</h4>
+            <li>Business Analyst memiliki rata-rata jumlah skill tertinggi (32,6 skill per CV), sedangkan Cloud Engineer memiliki rata-rata terendah (8,1 skill per CV).</li>
+            <h4>Pola Signature Skill Kandidat</h4>
+            <li>Beberapa skill terlihat sangat identik dengan role tertentu. Contohnya, A/B Testing muncul pada seluruh kandidat Data Scientist, sedangkan ASP.NET ditemukan pada 77% kandidat Business Analyst.</li>
         </div>
         """, unsafe_allow_html=True)
     with col_b:
         st.markdown("""
         <div class="gap-card">
-            <h4>🎯 Action Item</h4>
+            <h4>Action Item</h4>
             <li>Perusahaan sebaiknya menerapkan strategi screening berbasis signature skill untuk menyaring tumpukan CV. Mengingat tingginya persentase skill universal seperti SQL dan Testing yang dicantumkan oleh kandidat di hampir semua role, fokus pada skill spesifik yang memiliki skor keunikan tinggi seperti "A/B Testing" pada Data Scientist atau "Asp.Net" pada Business Analyst, ini akan menghasilkan shortlist kandidat yang jauh lebih berkualitas dan relevan.</li>
         </div>
         """, unsafe_allow_html=True)
@@ -566,8 +566,8 @@ elif page == "gap":
         }
         </style>
     """, unsafe_allow_html=True)
-    st.markdown('<div class="page-title">⚡ Analisis Gap Skill</div>', unsafe_allow_html=True)
-    st.markdown('<div class="page-subtitle" style="font-size:1.2rem;color:white;">Pertanyaan Bisnis 3: Bagaimana gap skill antara Kebutuhan Industri dengan Kandidat?</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-title">Analisis Gap Skill</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-subtitle">Pertanyaan Bisnis 3: Bagaimana gap skill antara Kebutuhan Industri dengan Kandidat?</div>', unsafe_allow_html=True)
 
     gap_df = D["gap_df"]
     high_gap_row = gap_df.sort_values("gap_score", ascending=False).iloc[0]
@@ -579,7 +579,7 @@ elif page == "gap":
     m3.metric("Gap Terkecil", f"{low_gap_row['gap_score']:.1f}%",  f"{low_gap_row['skill'].title()}")
 
     st.markdown("<hr>", unsafe_allow_html=True)
-    st.markdown('<div class="section-title" style="text-align:center">⚡ Analisis Kesenjangan Kebutuhan vs Ketersediaan Skill</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title" style="text-align:center">Analisis Kesenjangan Kebutuhan vs Ketersediaan Skill</div>', unsafe_allow_html=True)
 
     top_n_gap = st.selectbox("Tampilkan Top N Skill Gap", [3, 5, 10], index=1, label_visibility="collapsed")
 
@@ -596,13 +596,13 @@ elif page == "gap":
         st.plotly_chart(fig_low, use_container_width=True)
 
     st.markdown("<hr>", unsafe_allow_html=True)
-    st.markdown('<div class="section-title" style="text-align:center">📝 Kesimpulan & Rekomendasi</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title" style="text-align:center">Kesimpulan & Rekomendasi</div>', unsafe_allow_html=True)
 
     col_a, col_b = st.columns(2)
     with col_a:
         st.markdown("""
         <div class="gap-card">
-            <h4>📈 Gap Tertinggi</h4>
+            <h4>Gap Tertinggi</h4>
             <ul>
                 <li><strong>Node.Js</strong> — gap 98.8%</li>
                 <li><strong>A/B Testing</strong> — gap 98%</li>
@@ -611,7 +611,7 @@ elif page == "gap":
                 <li><strong>Artificial Intelligence</strong> — gap 96.7%</li>
             </ul>
             <br>
-            <h4>📉 Gap Terkecil</h4>
+            <h4>Gap Terkecil</h4>
             <ul>
                 <li><strong>Switching</strong> — gap 1%</li>
                 <li><strong>Siem</strong> — gap 1.8%</li>
@@ -624,14 +624,14 @@ elif page == "gap":
     with col_b:
         st.markdown("""
         <div class="gap-card">
-            <h4>🎯 Action Items untuk Kandidat</h4>
+            <h4>Action Items untuk Kandidat</h4>
             <ul>
-                <li>Kandidat sangat disarankan untuk memprioritaskan upskilling pada teknologi yang memiliki gap di atas 90% (seperti Node.js, A/B Testing, Looker, dan Artificial Intelligence). Menguasai rumpun keahlian ini akan meningkatkan daya saing di pasar kerja karena tingkat kelangkaannya yang tinggi di mata industri.</li>
+                <li>Skill seperti Node.js, A/B Testing, Looker, dan Artificial Intelligence masih banyak dicari industri, namun belum banyak dimiliki kandidat. Mengembangkan skill tersebut dapat menjadi peluang untuk meningkatkan daya saing di dunia kerja.</li>
             </ul>
             <br>
-            <h4>🎯 Action Items untuk Perusahaan</h4>
+            <h4>Action Items untuk Perusahaan</h4>
             <ul>
-                <li>Perusahaan dapat memanfaatkan data defisit ini untuk merancang program rekrutmen yang lebih terarah, atau menyusun program pelatihan internal (reskilling) guna menjembatani kelangkaan talenta siap pakai pada kompetensi-kompetensi kritis tersebut.</li>
+                <li>Skill dengan gap tinggi menunjukkan bahwa kebutuhan industri masih lebih besar dibandingkan jumlah kandidat yang memilikinya. Oleh karena itu, perusahaan dapat memprioritaskan rekrutmen atau pelatihan pada skill-skill tersebut.</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
