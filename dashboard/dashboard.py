@@ -3,7 +3,7 @@ import pandas as pd
 import ast
 import plotly.graph_objects as go
 
-# File Google Drive
+# Google Drive Files
 FILE_ID_JD = "1X68LndJS98ZIefRLEi5cwv3pl4-UMsol"
 FILE_ID_CV = "13LYhqvUZoIpWHGS1-ijs0aeSRnswl_PB"
 
@@ -16,16 +16,54 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-st.markdown("""
+if "theme_mode" not in st.session_state:
+    st.session_state.theme_mode = "Dark"
+
+if st.session_state.theme_mode == "Dark":
+    THEME = {
+        "bg_app": "#111111",
+        "bg_sidebar": "#1A1A1A",
+        "bg_card": "#1A1A1A",
+        "bg_gap_card": "#181818",
+        "text_main": "#FFFFFF",
+        "text_muted": "#AAAAAA",
+        "text_subtitle": "#888888",
+        "text_sec_title": "#666666",
+        "border": "#2a2a2a",
+        "btn_border": "#2e2e2e",
+        "btn_text": "#CCCCCC",
+        "header_text": "white",
+        "accent": "#E4002B",
+        "plotly_bg": "#161616"
+    }
+else:
+    THEME = {
+        "bg_app": "#FAFAFA",
+        "bg_sidebar": "#F0F2F5",
+        "bg_card": "#FFFFFF",
+        "bg_gap_card": "#FFFFFF",
+        "text_main": "#1A1A1A",
+        "text_muted": "#555555",
+        "text_subtitle": "#666666",
+        "text_sec_title": "#888888",
+        "border": "#E0E0E0",
+        "btn_border": "#D0D0D0",
+        "btn_text": "#444444",
+        "header_text": "#1A1A1A",
+        "accent": "#E4002B",
+        "plotly_bg": "#F5F5F5"
+    }
+
+st.markdown(f"""
 <style>
-header[data-testid="stHeader"] {
-    background-color: #111111 !important;
-    border-bottom: 1px solid #2a2a2a !important;
+header[data-testid="stHeader"] {{
+    background-color: {THEME["bg_app"]} !important;
+    border-bottom: 1px solid {THEME["border"]} !important;
     box-shadow: none !important;
-}
-header[data-testid="stHeader"]::before {
-    content: "Analisis Tren Skill IT";
-    color: white !important;
+}}
+header[data-testid="stHeader"]::before {{
+    content: "IT Skill Trend Analysis";
+    color: {THEME["header_text"]} !important;
     font-size: 1.5rem !important;
     font-family: sans-serif;
     font-weight: 600;
@@ -35,23 +73,23 @@ header[data-testid="stHeader"]::before {
     top: 50%;
     transform: translateY(-50%);
     pointer-events: none;
-}
-html, body, [data-testid="stApp"] {
-    background-color: #111111 !important;
-    color: #FFFFFF;
-}
-[data-testid="stSidebar"] {
-    background-color: #1A1A1A !important;
-    border-right: 1px solid #2a2a2a;
-}
-[data-testid="stAppViewContainer"] > .main > .block-container {
+}}
+html, body, [data-testid="stApp"] {{
+    background-color: {THEME["bg_app"]} !important;
+    color: {THEME["text_main"]};
+}}
+[data-testid="stSidebar"] {{
+    background-color: {THEME["bg_sidebar"]} !important;
+    border-right: 1px solid {THEME["border"]};
+}}
+[data-testid="stAppViewContainer"] > .main > .block-container {{
     padding-top: 5rem !important;
-}
-div[data-testid="stSidebar"] .stButton > button {
+}}
+div[data-testid="stSidebar"] .stButton > button {{
     width: 100%;
     background: transparent;
-    color: #CCCCCC;
-    border: 1px solid #2e2e2e;
+    color: {THEME["btn_text"]};
+    border: 1px solid {THEME["btn_border"]};
     border-radius: 6px;
     padding: 10px 14px;
     text-align: left;
@@ -59,70 +97,70 @@ div[data-testid="stSidebar"] .stButton > button {
     letter-spacing: 0.02em;
     transition: all 0.2s ease;
     margin-bottom: 4px;
-}
-div[data-testid="stSidebar"] .stButton > button:hover {
-    background: #E4002B22;
-    border-color: #E4002B;
-    color: #FFFFFF;
-}
+}}
+div[data-testid="stSidebar"] .stButton > button:hover {{
+    background: {THEME["accent"]}22;
+    border-color: {THEME["accent"]};
+    color: {THEME["text_main"]};
+}}
 div[data-testid="stSidebar"] .stButton > button[aria-pressed="true"],
-div[data-testid="stSidebar"] .stButton > button:focus {
-    background: #E4002B !important;
-    border-color: #E4002B !important;
+div[data-testid="stSidebar"] .stButton > button:focus {{
+    background: {THEME["accent"]} !important;
+    border-color: {THEME["accent"]} !important;
     color: #FFFFFF !important;
-}
-[data-testid="stMetric"] {
-    background: #1A1A1A;
-    border: 1px solid #2a2a2a;
+}}
+[data-testid="stMetric"] {{
+    background: {THEME["bg_card"]};
+    border: 1px solid {THEME["border"]};
     border-radius: 10px;
     padding: 16px 20px;
-}
-[data-testid="stMetricLabel"] { color: #AAAAAA !important; font-size: 0.78rem; }
-[data-testid="stMetricValue"] { color: #FFFFFF !important; font-size: 1.5rem; }
-[data-testid="stMetricDelta"] { color: #E4002B !important; }
-hr { border-color: #2a2a2a; }
-.stSelectbox label, .stNumberInput label { color: #CCCCCC !important; font-size: 0.82rem; }
-.section-title {
+}}
+[data-testid="stMetricLabel"] {{ color: {THEME["text_muted"]} !important; font-size: 0.78rem; }}
+[data-testid="stMetricValue"] {{ color: {THEME["text_main"]} !important; font-size: 1.5rem; }}
+[data-testid="stMetricDelta"] {{ color: {THEME["accent"]} !important; }}
+hr {{ border-color: {THEME["border"]}; }}
+.stSelectbox label, .stNumberInput label {{ color: {THEME["text_muted"]} !important; font-size: 0.82rem; }}
+.section-title {{
     font-size: 0.72rem;
     font-weight: 600;
-    color: #666666;
+    color: {THEME["text_sec_title"]};
     letter-spacing: 0.12em;
     text-transform: uppercase;
     margin-bottom: 6px;
-}
-.page-title {
+}}
+.page-title {{
     font-size: 1.7rem;
     font-weight: 800;
-    color: #FFFFFF;
+    color: {THEME["text_main"]};
     letter-spacing: -0.01em;
-}
-.page-subtitle {
-    color: #888888;
+}}
+.page-subtitle {{
+    color: {THEME["text_subtitle"]};
     font-size: 0.88rem;
     margin-top: 4px;
     margin-bottom: 20px;
     max-width: 820px;
-}
-.gap-card {
-    background: #181818;
-    border: 1px solid #2a2a2a;
-    border-left: 3px solid #E4002B;
+}}
+.gap-card {{
+    background: {THEME["bg_gap_card"]};
+    border: 1px solid {THEME["border"]};
+    border-left: 3px solid {THEME["accent"]};
     border-radius: 8px;
     padding: 20px 24px;
     margin-top: 8px;
-}
-.gap-card h4 {
-    color: #BBBBBB;
+}}
+.gap-card h4 {{
+    color: {THEME["text_muted"]};
     font-size: 0.72rem;
     letter-spacing: 0.10em;
     text-transform: uppercase;
     margin-bottom: 10px;
     margin-top: 14px;
-}
-.gap-card h4:first-child { margin-top: 0; }
-.gap-card ul { color: #CCCCCC; font-size: 0.86rem; line-height: 1.7; padding-left: 18px; }
-.gap-card li { color: #CCCCCC; font-size: 0.86rem; line-height: 1.7; }
-.gap-card li strong { color: #FFFFFF; }
+}}
+.gap-card h4:first-child {{ margin-top: 0; }}
+.gap-card ul {{ color: {THEME["text_muted"]}; font-size: 0.86rem; line-height: 1.7; padding-left: 18px; }}
+.gap-card li {{ color: {THEME["text_muted"]}; font-size: 0.86rem; line-height: 1.7; }}
+.gap-card li strong {{ color: {THEME["text_main"]}; }}
 </style>
 """, unsafe_allow_html=True)
 
@@ -141,7 +179,7 @@ def parse_skills(val):
     return [s.strip() for s in val.split(",") if s.strip()]
 
 
-@st.cache_data(show_spinner="Memuat data…")
+@st.cache_data(show_spinner="Loading data…")
 def load_data():
     import gdown, os
 
@@ -239,26 +277,19 @@ def load_data():
     }
 
 
-# Chart constants
-ACCENT     = "#E4002B"
-ACCENT_DIM = "#7a0016"
-BG_PLOT    = "#161616"
-GRID_COLOR = "#2a2a2a"
-TEXT_COLOR = "#CCCCCC"
-
 PLOTLY_LAYOUT = dict(
-    paper_bgcolor=BG_PLOT,
-    plot_bgcolor=BG_PLOT,
-    font=dict(color=TEXT_COLOR, family="Inter, sans-serif", size=12),
+    paper_bgcolor=THEME["plotly_bg"],
+    plot_bgcolor=THEME["plotly_bg"],
+    font=dict(color=THEME["text_muted"], family="Inter, sans-serif", size=12),
     margin=dict(l=0, r=0, t=40, b=0),
-    xaxis=dict(gridcolor=GRID_COLOR, gridwidth=1, zeroline=False, showline=False, tickcolor=TEXT_COLOR),
-    yaxis=dict(gridcolor="rgba(0,0,0,0)", zeroline=False, showline=False, tickcolor=TEXT_COLOR),
-    hoverlabel=dict(bgcolor="#1e1e1e", bordercolor=ACCENT, font=dict(color="#FFFFFF", size=12)),
+    xaxis=dict(gridcolor=THEME["border"], gridwidth=1, zeroline=False, showline=False, tickcolor=THEME["text_muted"]),
+    yaxis=dict(gridcolor="rgba(0,0,0,0)", zeroline=False, showline=False, tickcolor=THEME["text_muted"]),
+    hoverlabel=dict(bgcolor=THEME["bg_card"], bordercolor=THEME["accent"], font=dict(color=THEME["text_main"], size=12)),
 )
 
 
 def hbar_chart(y_labels, x_vals, title, text_labels=None, reversed_axis=False,
-               bar_color=ACCENT, height=420, x_title=""):
+               bar_color=THEME["accent"], height=420, x_title=""):
     hover_text = [
         f"<b>{lbl.title()}</b><br>{txt}" if text_labels else f"<b>{lbl.title()}</b><br>{x:.2f}"
         for lbl, x, txt in zip(y_labels, x_vals, text_labels if text_labels else [""]*len(y_labels))
@@ -268,15 +299,15 @@ def hbar_chart(y_labels, x_vals, title, text_labels=None, reversed_axis=False,
         y=y_labels, x=x_vals, orientation="h",
         marker=dict(color=bar_color, line=dict(width=0)),
         text=text_labels, textposition="outside",
-        textfont=dict(color=TEXT_COLOR, size=10),
+        textfont=dict(color=THEME["text_main"], size=10),
         hovertemplate="%{customdata}<extra></extra>",
         customdata=hover_text,
     ))
     layout = {**PLOTLY_LAYOUT}
-    layout["title"] = dict(text=f"<b>{title}</b>", font=dict(color="#FFFFFF", size=14), x=0, xanchor="left")
+    layout["title"] = dict(text=f"<b>{title}</b>", font=dict(color=THEME["text_main"], size=14), x=0, xanchor="left")
     layout["height"] = height
     layout["xaxis"]["title"] = x_title
-    layout["xaxis"]["title_font"] = dict(color="#888888", size=11)
+    layout["xaxis"]["title_font"] = dict(color=THEME["text_subtitle"], size=11)
     layout["bargap"] = 0.35
     if reversed_axis:
         layout["yaxis"]["side"] = "right"
@@ -341,121 +372,140 @@ def make_gap_chart(gap_df, top_n, ascending=False):
     fig = go.Figure()
     fig.add_trace(go.Bar(
         y=labels, x=jd_vals, orientation="h",
-        marker=dict(color=ACCENT, line=dict(width=0)),
+        marker=dict(color=THEME["accent"], line=dict(width=0)),
         text=[f"{v:.3f}  ▏Gap {g:.1f}%" for v, g in zip(jd_vals, gap_vals)],
         textposition="outside",
-        textfont=dict(color=TEXT_COLOR, size=10),
+        textfont=dict(color=THEME["text_muted"], size=10),
         hovertemplate="<b>%{y}</b><br>Industry: %{x:.3f}%<extra></extra>",
     ))
     layout = {**PLOTLY_LAYOUT, "height": h, "bargap": 0.38,
               "title": dict(text="<b>Industry Skill Demand</b>",
-                            font=dict(color="#FFFFFF", size=14), x=0)}
+                            font=dict(color=THEME["text_main"], size=14), x=0)}
     fig.update_layout(**layout)
     return fig
 
 
-# Sidebar
+# Sidebar Layout
 with st.sidebar:
-    st.markdown("""
+    st.markdown(f"""
     <div style='text-align:center; padding: 16px 0 8px 0;'>
-        <div style='font-size:2.4rem; margin-bottom:4px; color:white'><b>ResuMy</b></div>
+        <div style='font-size:2.4rem; margin-bottom:4px; color:{THEME["header_text"]}'><b>ResuMy</b></div>
         <div style='font-size:1.1rem; font-weight:800; color:#E4002B;
                     letter-spacing:0.08em; text-transform:uppercase;'>
             CC26-PSU006
         </div>
     </div>
-    <hr style='border-color:#2a2a2a; margin: 10px 0 16px 0;'>
+    <hr style='border-color:{THEME["border"]}; margin: 10px 0 16px 0;'>
     """, unsafe_allow_html=True)
 
-    st.markdown("<div style='color:#888;font-size:0.72rem;letter-spacing:0.08em;"
-                "text-transform:uppercase;margin-bottom:8px;'>Halaman Dashboard</div>",
+    st.markdown(f"<div style='color:{THEME['text_sec_title']};font-size:0.72rem;letter-spacing:0.08em;"
+                "text-transform:uppercase;margin-bottom:8px;'>Dashboard Pages</div>",
                 unsafe_allow_html=True)
 
     if "page" not in st.session_state:
         st.session_state.page = "industri"
 
     pages = {
-        "industri": "Tren Kebutuhan Industri",
-        "kandidat": "Karakteristik Kandidat",
-        "gap":      "Analisis Gap Skill",
+        "industri": "Industry Demand Trends",
+        "kandidat": "Candidate Characteristics",
+        "gap":      "Skill Gap Analysis",
     }
     for key, label in pages.items():
         if st.button(label, key=f"nav_{key}", use_container_width=True):
             st.session_state.page = key
 
-    st.markdown("<hr style='border-color:#2a2a2a; margin:16px 0;'>", unsafe_allow_html=True)
+   # Mode
+    st.markdown("<br>" * 5, unsafe_allow_html=True) 
+    st.markdown(f"<hr style='border-color:{THEME['border']}; margin:16px 0 12px 0;'>", unsafe_allow_html=True)
+    
+    col_label, col_switch = st.columns([3, 1])
+    with col_label:
+        label_text = "🌙 Dark Mode" if st.session_state.theme_mode == "Dark" else "☀️ Light Mode"
+        st.markdown(f"<div style='color:{THEME['text_main']}; font-size:0.9rem; padding-top:2px;'>{label_text}</div>", unsafe_allow_html=True)
+        
+    with col_switch:
+        switch_state = st.toggle(
+            "Toggle Theme", 
+            value=(st.session_state.theme_mode == "Dark"),
+            label_visibility="collapsed"
+        )
+    
+    new_mode = "Dark" if switch_state else "Light"
+    if new_mode != st.session_state.theme_mode:
+        st.session_state.theme_mode = new_mode
+        st.rerun()
 
 # Load data
 try:
     D = load_data()
 except Exception as e:
-    st.error(f"**Error saat memuat data:** {e}")
+    st.error(f"**Error loading data:** {e}")
     st.stop()
 
 page = st.session_state.page
 
 
-# PAGE 1 Industri
+# PAGE 1 Industry Demand Trends
 if page == "industri":
-    st.markdown("""
+    st.markdown(f"""
         <style>
-        div[data-testid="stVerticalBlock"] > div:has(div.page-title) {
+        div[data-testid="stVerticalBlock"] > div:has(div.page-title) {{
             position: -webkit-sticky; position: sticky; top: 0rem;
-            background-color: #111111; z-index: 999;
+            background-color: {THEME["bg_app"]}; z-index: 999;
             padding-top: 4rem; padding-bottom: 1rem; margin-top: -4rem;
-        }
+        }}
         </style>
     """, unsafe_allow_html=True)
-    st.markdown('<div class="page-title">Tren Kebutuhan Industri</div>', unsafe_allow_html=True)
-    st.markdown('<div class="page-subtitle">Pertanyaan Bisnis 1: Bagaimana tren kebutuhan skill IT pada berbagai role industri, serta skill apa yang bersifat universal dan spesifik pada masing-masing role?</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-title">Industry Demand Trends</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-subtitle">Business Question 1: What are the IT skill demand trends across various industrial roles, and which skills are universal versus specific to each role?</div>', unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns(3)
-    col1.metric("Total Role Industri", D["df_jd"]["job_role"].nunique())
+    col1.metric("Total Industry Roles", D["df_jd"]["job_role"].nunique())
     col2.metric("Total Job Postings",  f"{len(D['df_jd']):,}")
     col3.metric("Unique Skills",       D["df_jd_skills"]["skill"].nunique())
 
     st.markdown("<hr>", unsafe_allow_html=True)
-    st.markdown('<div class="section-title" style="text-align:center">Top Skill</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title" style="text-align:center">Top Skills</div>', unsafe_allow_html=True)
 
     ctrl1, ctrl2 = st.columns([3, 1])
     with ctrl1:
-        selected_domain = st.selectbox("Pilih Role Industri",
+        selected_domain = st.selectbox("Select Industry Role",
                                        sorted(D["df_jd"]["job_role"].unique()),
                                        label_visibility="collapsed")
     with ctrl2:
         top_n_jd = st.selectbox("Top N", [3, 5, 10], index=1, label_visibility="collapsed")
 
     fig = make_top_n_chart(D["df_jd_skills"], "job_role", selected_domain, top_n_jd,
-                           D["df_jd"], f"Top {top_n_jd} Skill {selected_domain}")
+                           D["df_jd"], f"Top {top_n_jd} Skills for {selected_domain}")
     fig.update_layout(title_x=0.5, title_xanchor="center")
     st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("<hr>", unsafe_allow_html=True)
-    st.markdown('<div class="section-title" style="text-align:center">Ringkasan Semua Role</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title" style="text-align:center">All Roles Summary</div>', unsafe_allow_html=True)
 
     col_left, col_right = st.columns(2)
     with col_left:
         fig_avg = make_jumlah_skill_chart(D["domain_avg"], "job_role", "avg_skill",
-                                          "Rata-Rata Jumlah Skill")
+                                          "Average Number of Required Skills")
         fig_avg.update_layout(title_x=0.5, title_xanchor="center")
         st.plotly_chart(fig_avg, use_container_width=True)
     with col_right:
         fig_sig = make_signature_chart(D["sig_jd"], "job_role",
-                                       "Signature Skill", reversed_axis=True)
+                                       "Signature Skills", reversed_axis=True)
         fig_sig.update_layout(title_x=0.5, title_xanchor="center")
         st.plotly_chart(fig_sig, use_container_width=True)
 
     st.markdown("<hr>", unsafe_allow_html=True)
-    st.markdown('<div class="section-title" style="text-align:center">Kesimpulan & Rekomendasi</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title" style="text-align:center">Conclusions & Recommendations</div>', unsafe_allow_html=True)
 
     col_a, col_b = st.columns(2)
     with col_a:
         st.markdown("""
         <div class="gap-card">
-            <h4>Skill yang Mendominasi Secara Keseluruhan</h4>
-            <li>Python, SQL, Analytics, Reporting, dan Excel ditemukan pada banyak role, menunjukkan bahwa skill tersebut dibutuhkan di berbagai bidang pekerjaan IT.</li>
+            <h4>Overall Dominant Skills</h4>
+            <li>Python, SQL, Analytics, Reporting, and Excel are frequently found across many roles, indicating that these skills are universally required in various IT professions.</li>
             <br>
-            <h4>Skill Signature Role</h4>
+            <h4>Signature Role Skills</h4>
             <ul>
                 <li>Artificial Intelligence → AI Engineer</li>
                 <li>Machine Learning → Machine Learning Engineer</li>
@@ -463,142 +513,142 @@ if page == "industri":
                 <li>Javascript → Web Developer</li>
                 <li>Azure / AWS → Cloud Architect</li>
             </ul>
-            <h4>Frekuensi Kemunculan vs Keunikan</h4>
-            <li>Python dan Excel banyak ditemukan di berbagai role. Sebaliknya, Artificial Intelligence dan Machine Learning lebih identik dengan role tertentu.</li>
+            <h4>Appearance Frequency vs Uniqueness</h4>
+            <li>Python and Excel are ubiquitous across roles. Conversely, Artificial Intelligence and Machine Learning are highly specific and strongly tied to precise technical roles.</li>
         </div>
         """, unsafe_allow_html=True)
     with col_b:
         st.markdown("""
         <div class="gap-card">
-            <h4>Action Item</h4>
-            <li>Skill yang khas pada suatu role dapat menjadi fokus utama dalam job posting. Sementara itu, skill yang umum ditemukan di berbagai role dapat dijadikan persyaratan tambahan.</li>
+            <h4>Action Items</h4>
+            <li>Signature skills unique to a role should serve as primary focus points in job postings. Meanwhile, universal skills found across multiple roles can be treated as baseline or supplementary requirements.</li>
         </div>
         """, unsafe_allow_html=True)
 
 
-# PAGE 2 Kandidat
+# PAGE 2 Candidate Characteristics
 if page == "kandidat":
-    st.markdown("""
+    st.markdown(f"""
         <style>
-        div[data-testid="stVerticalBlock"] > div:has(div.page-title) {
+        div[data-testid="stVerticalBlock"] > div:has(div.page-title) {{
             position: -webkit-sticky; position: sticky; top: 0rem;
-            background-color: #111111; z-index: 999;
+            background-color: {THEME["bg_app"]}; z-index: 999;
             padding-top: 4rem; padding-bottom: 1rem; margin-top: -4rem;
-        }
+        }}
         </style>
     """, unsafe_allow_html=True)
-    st.markdown('<div class="page-title">Karakteristik Kandidat</div>', unsafe_allow_html=True)
-    st.markdown('<div class="page-subtitle">Pertanyaan Bisnis 2: Bagaimana karakteristik kepemilikan skill kandidat pada berbagai role IT?</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-title">Candidate Characteristics</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-subtitle">Business Question 2: What are the skill ownership characteristics of candidates across various IT roles?</div>', unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns(3)
-    col1.metric("Total Role Kandidat", D["df_cv"]["cv_role"].nunique())
-    col2.metric("Total Kandidat",      f"{len(D['df_cv']):,}")
+    col1.metric("Total Candidate Roles", D["df_cv"]["cv_role"].nunique())
+    col2.metric("Total Candidates",      f"{len(D['df_cv']):,}")
     col3.metric("Unique Skills",       D["df_cv_skills"]["skill"].nunique())
 
     st.markdown("<hr>", unsafe_allow_html=True)
-    st.markdown('<div class="section-title" style="text-align:center">Top Skill Kandidat</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title" style="text-align:center">Top Candidate Skills</div>', unsafe_allow_html=True)
 
     ctrl1, ctrl2 = st.columns([3, 1])
     with ctrl1:
-        selected_role = st.selectbox("Pilih Role Kandidat",
+        selected_role = st.selectbox("Select Candidate Role",
                                      sorted(D["df_cv"]["cv_role"].unique()),
                                      label_visibility="collapsed")
     with ctrl2:
         top_n_cv = st.selectbox("Top N", [3, 5, 10], index=1, label_visibility="collapsed")
 
     fig = make_top_n_chart(D["df_cv_skills"], "cv_role", selected_role, top_n_cv,
-                           D["df_cv"], f"Top {top_n_cv} Skill Kandidat {selected_role}")
+                           D["df_cv"], f"Top {top_n_cv} Skills for Candidate {selected_role}")
     fig.update_layout(title_x=0.5, title_xanchor="center")
     st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("<hr>", unsafe_allow_html=True)
-    st.markdown('<div class="section-title" style="text-align:center">Ringkasan Semua Role Kandidat</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title" style="text-align:center">All Candidate Roles Summary</div>', unsafe_allow_html=True)
 
     col_left, col_right = st.columns(2)
     with col_left:
         fig_avg = make_jumlah_skill_chart(D["role_avg"], "cv_role", "avg_skill",
-                                          "Rata-Rata Jumlah Skill Kandidat")
+                                          "Average Number of Candidate Skills")
         fig_avg.update_layout(title_x=0.5, title_xanchor="center")
         st.plotly_chart(fig_avg, use_container_width=True)
     with col_right:
         fig_sig = make_signature_chart(D["sig_cv"], "cv_role",
-                                       "Signature Skill", reversed_axis=True)
+                                       "Candidate Signature Skills", reversed_axis=True)
         fig_sig.update_layout(title_x=0.5, title_xanchor="center")
         st.plotly_chart(fig_sig, use_container_width=True)
 
     st.markdown("<hr>", unsafe_allow_html=True)
-    st.markdown('<div class="section-title" style="text-align:center">Kesimpulan & Rekomendasi</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title" style="text-align:center">Conclusions & Recommendations</div>', unsafe_allow_html=True)
 
     col_a, col_b = st.columns(2)
     with col_a:
         st.markdown("""
         <div class="gap-card">
-            <h4>Skill Terpopuler</h4>
-            <li>SQL dan Testing merupakan skill yang paling sering muncul pada berbagai role kandidat. Selain itu, HTML dan JavaScript juga banyak ditemukan pada CV kandidat di beberapa role.</li>
+            <h4>Most Popular Skills</h4>
+            <li>SQL and Testing are the most frequently appearing skills across all candidate profiles. Additionally, HTML and JavaScript are heavily populated within candidate resumes in several developer roles.</li>
             <br>
-            <h4>Variasi Jumlah Skill per Role</h4>
-            <li>Business Analyst memiliki rata-rata jumlah skill tertinggi (32,6 skill per CV), sedangkan Cloud Engineer memiliki rata-rata terendah (8,1 skill per CV).</li>
-            <h4>Pola Signature Skill Kandidat</h4>
-            <li>Beberapa skill terlihat sangat identik dengan role tertentu. Contohnya, A/B Testing muncul pada seluruh kandidat Data Scientist, sedangkan ASP.NET ditemukan pada 77% kandidat Business Analyst.</li>
+            <h4>Skill Count Variation per Role</h4>
+            <li>Business Analysts possess the highest average number of listed skills (32.6 skills per CV), while Cloud Engineers maintain the lowest average profile breadth (8.1 skills per CV).</li>
+            <h4>Candidate Signature Skill Patterns</h4>
+            <li>Certain skills appear perfectly aligned with specific roles. For instance, A/B Testing appears on 100% of Data Scientist resumes, whereas ASP.NET is found on 77% of Business Analyst CVs.</li>
         </div>
         """, unsafe_allow_html=True)
     with col_b:
         st.markdown("""
         <div class="gap-card">
-            <h4>Action Item</h4>
-            <li>Perusahaan sebaiknya menerapkan strategi screening berbasis signature skill untuk menyaring tumpukan CV. Mengingat tingginya persentase skill universal seperti SQL dan Testing yang dicantumkan oleh kandidat di hampir semua role, fokus pada skill spesifik yang memiliki skor keunikan tinggi seperti "A/B Testing" pada Data Scientist atau "Asp.Net" pada Business Analyst, ini akan menghasilkan shortlist kandidat yang jauh lebih berkualitas dan relevan.</li>
+            <h4>Action Items</h4>
+            <li>Companies should deploy screening strategies oriented around signature skills to filter massive resume pipelines. Given the incredibly high baseline of universal skills like SQL and Testing listed by candidates across nearly all roles, focusing on role-specific skills with high uniqueness scores (e.g., "A/B Testing" for Data Scientists or "ASP.NET" for Business Analysts) will yield a significantly higher quality and more relevant candidate shortlist.</li>
         </div>
         """, unsafe_allow_html=True)
 
 
-# PAGE 3 Gap
+# PAGE 3 Skill Gap Analysis
 elif page == "gap":
-    st.markdown("""
+    st.markdown(f"""
         <style>
-        div[data-testid="stVerticalBlock"] > div:has(div.page-title) {
+        div[data-testid="stVerticalBlock"] > div:has(div.page-title) {{
             position: -webkit-sticky; position: sticky; top: 0rem;
-            background-color: #111111; z-index: 999;
+            background-color: {THEME["bg_app"]}; z-index: 999;
             padding-top: 4rem; padding-bottom: 1rem; margin-top: -4rem;
-        }
+        }}
         </style>
     """, unsafe_allow_html=True)
-    st.markdown('<div class="page-title">Analisis Gap Skill</div>', unsafe_allow_html=True)
-    st.markdown('<div class="page-subtitle">Pertanyaan Bisnis 3: Bagaimana gap skill antara Kebutuhan Industri dengan Kandidat?</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-title">Skill Gap Analysis</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-subtitle">Business Question 3: What is the skill gap between Industry Demand and Candidate availability?</div>', unsafe_allow_html=True)
 
     gap_df = D["gap_df"]
     high_gap_row = gap_df.sort_values("gap_score", ascending=False).iloc[0]
     low_gap_row  = gap_df.sort_values("gap_score", ascending=True).iloc[0]
 
     m1, m2, m3 = st.columns(3)
-    m1.metric("Total Skill", f"{len(gap_df):,}")
-    m2.metric("Gap Terbesar",  f"{high_gap_row['gap_score']:.1f}%", f"{high_gap_row['skill'].title()}")
-    m3.metric("Gap Terkecil", f"{low_gap_row['gap_score']:.1f}%",  f"{low_gap_row['skill'].title()}")
+    m1.metric("Total Tracked Skills", f"{len(gap_df):,}")
+    m2.metric("Largest Discrepancy (Max Gap)",  f"{high_gap_row['gap_score']:.1f}%", f"{high_gap_row['skill'].title()}")
+    m3.metric("Closest Alignment (Min Gap)", f"{low_gap_row['gap_score']:.1f}%",  f"{low_gap_row['skill'].title()}")
 
     st.markdown("<hr>", unsafe_allow_html=True)
-    st.markdown('<div class="section-title" style="text-align:center">Analisis Kesenjangan Kebutuhan vs Ketersediaan Skill</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title" style="text-align:center">Skill Discrepancy: Market Demand vs Talent Supply</div>', unsafe_allow_html=True)
 
-    top_n_gap = st.selectbox("Tampilkan Top N Skill Gap", [3, 5, 10], index=1, label_visibility="collapsed")
+    top_n_gap = st.selectbox("Display Top N Skill Gaps", [3, 5, 10], index=1, label_visibility="collapsed")
 
     col_l, col_r = st.columns(2)
     with col_l:
         fig_high = make_gap_chart(gap_df, top_n_gap, ascending=False)
-        fig_high.update_layout(title=f"Top {top_n_gap} Gap Tertinggi (Largest Gap)",
+        fig_high.update_layout(title=f"Top {top_n_gap} Largest Gaps",
                                title_x=0.5, title_xanchor="center")
         st.plotly_chart(fig_high, use_container_width=True)
     with col_r:
         fig_low = make_gap_chart(gap_df, top_n_gap, ascending=True)
-        fig_low.update_layout(title=f"Top {top_n_gap} Gap Terendah (Smallest Gap)",
+        fig_low.update_layout(title=f"Top {top_n_gap} Smallest Gaps",
                               title_x=0.5, title_xanchor="center")
         st.plotly_chart(fig_low, use_container_width=True)
 
     st.markdown("<hr>", unsafe_allow_html=True)
-    st.markdown('<div class="section-title" style="text-align:center">Kesimpulan & Rekomendasi</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title" style="text-align:center">Conclusions & Recommendations</div>', unsafe_allow_html=True)
 
     col_a, col_b = st.columns(2)
     with col_a:
         st.markdown("""
         <div class="gap-card">
-            <h4>Gap Tertinggi</h4>
+            <h4>Highest Gaps</h4>
             <ul>
                 <li><strong>Node.Js</strong> — gap 98.8%</li>
                 <li><strong>A/B Testing</strong> — gap 98%</li>
@@ -607,11 +657,11 @@ elif page == "gap":
                 <li><strong>Artificial Intelligence</strong> — gap 96.7%</li>
             </ul>
             <br>
-            <h4>Gap Terkecil</h4>
+            <h4>Lowest Gaps</h4>
             <ul>
-                <li><strong>Switching</strong> — gap 1%</li>
+                <li><strong>Switching</strong> — gap 1.0%</li>
                 <li><strong>Siem</strong> — gap 1.8%</li>
-                <li><strong>Elasticsearch</strong> — gap 2%</li>
+                <li><strong>Elasticsearch</strong> — gap 2.0%</li>
                 <li><strong>Incident Management</strong> — gap 2.5%</li>
                 <li><strong>C</strong> — gap 3.2%</li>
             </ul>
@@ -620,14 +670,14 @@ elif page == "gap":
     with col_b:
         st.markdown("""
         <div class="gap-card">
-            <h4>Action Items untuk Kandidat</h4>
+            <h4>Action Items for Candidates</h4>
             <ul>
-                <li>Skill seperti Node.js, A/B Testing, Looker, dan Artificial Intelligence masih banyak dicari industri, namun belum banyak dimiliki kandidat. Mengembangkan skill tersebut dapat menjadi peluang untuk meningkatkan daya saing di dunia kerja.</li>
+                <li>Skills such as Node.js, A/B Testing, Looker, and Artificial Intelligence remain highly sought after by the industry but are significantly underrepresented in candidate profiles. Mastering these skills will maximize your competitive edge in the market.</li>
             </ul>
             <br>
-            <h4>Action Items untuk Perusahaan</h4>
+            <h4>Action Items for Companies</h4>
             <ul>
-                <li>Skill dengan gap tinggi menunjukkan bahwa kebutuhan industri masih lebih besar dibandingkan jumlah kandidat yang memilikinya. Oleh karena itu, perusahaan dapat memprioritaskan rekrutmen atau pelatihan pada skill-skill tersebut.</li>
+                <li>High gap scores point to strict resource scarcity. Organizations should build specialized upskilling/training initiatives internally or restructure competitive acquisition pipelines specifically targetting talent with these high-deficit skills.</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
